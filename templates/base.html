@@ -26,7 +26,7 @@
         }
 
         .page {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 32px auto;
             background: white;
             padding: 28px;
@@ -86,12 +86,40 @@
             color: #6b7280;
             font-size: 14px;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f9fafb;
+        }
+
+        .top-actions {
+            margin-bottom: 18px;
+        }
+
+        .top-actions a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
         {% if session.get('username') %}
             <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('clients') }}">Clients</a>
+            <a href="{{ url_for('add_client') }}">Add Client</a>
             <a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
     </div>

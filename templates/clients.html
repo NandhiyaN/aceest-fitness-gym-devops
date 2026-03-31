@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Clients</h2>
+
+<div class="top-actions">
+    <a href="{{ url_for('add_client') }}">+ Add New Client</a>
+</div>
+
+{% if clients %}
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Height</th>
+            <th>Weight</th>
+            <th>Membership Status</th>
+            <th>Membership End</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client in clients %}
+        <tr>
+            <td>{{ client.name }}</td>
+            <td>{{ client.age or "" }}</td>
+            <td>{{ client.height or "" }}</td>
+            <td>{{ client.weight or "" }}</td>
+            <td>{{ client.membership_status or "" }}</td>
+            <td>{{ client.membership_end or "" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="muted">No clients available yet.</p>
+{% endif %}
+{% endblock %}

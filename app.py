@@ -108,11 +108,68 @@ def login():
 @app.route("/dashboard")
 @login_required
 def dashboard():
+    conn = get_connection()
+    client_count = conn.execute("SELECT COUNT(*) AS total FROM clients").fetchone()["total"]
+    conn.close()
+
     return render_template(
         "dashboard.html",
         username=session.get("username"),
-        role=session.get("role")
+        role=session.get("role"),
+        client_count=client_count
     )
+
+
+@app.route("/clients")
+@login_required
+def clients():
+    conn = get_connection()
+    client_list = conn.execute(
+        "SELECT * FROM clients ORDER BY name"
+    ).fetchall()
+    conn.close()
+
+    return render_template("clients.html", clients=client_list)
+
+
+@app.route("/clients/add", methods=["GET", "POST"])
+@login_required
+def add_client():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        age = request.form.get("age", "").strip()
+        height = request.form.get("height", "").strip()
+        weight = request.form.get("weight", "").strip()
+        membership_status = request.form.get("membership_status", "").strip()
+        membership_end = request.form.get("membership_end", "").strip()
+
+        if not name:
+            flash("Client name is required.", "error")
+            return redirect(url_for("add_client"))
+
+        conn = get_connection()
+        try:
+            conn.execute("""
+                INSERT INTO clients (name, age, height, weight, membership_status, membership_end)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (
+                name,
+                age if age else None,
+                height if height else None,
+                weight if weight else None,
+                membership_status if membership_status else None,
+                membership_end if membership_end else None
+            ))
+            conn.commit()
+            flash("Client added successfully.", "success")
+        except sqlite3.IntegrityError:
+            flash("Client already exists.", "error")
+        finally:
+            conn.close()
+
+        return redirect(url_for("clients"))
+
+    return render_template("add_client.html")
 
 
 @app.route("/logout")
