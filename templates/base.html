@@ -107,10 +107,15 @@
             margin-bottom: 18px;
         }
 
-        .top-actions a {
+        .top-actions a,
+        .inline-link {
             text-decoration: none;
             color: #2563eb;
             font-weight: 600;
+        }
+
+        .action-links a {
+            margin-right: 12px;
         }
     </style>
 </head>
@@ -120,6 +125,8 @@
             <a href="{{ url_for('dashboard') }}">Dashboard</a>
             <a href="{{ url_for('clients') }}">Clients</a>
             <a href="{{ url_for('add_client') }}">Add Client</a>
+            <a href="{{ url_for('workouts') }}">Workouts</a>
+            <a href="{{ url_for('add_workout') }}">Add Workout</a>
             <a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
     </div>

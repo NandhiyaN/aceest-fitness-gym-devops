@@ -15,8 +15,10 @@
             <th>Age</th>
             <th>Height</th>
             <th>Weight</th>
+            <th>Program</th>
             <th>Membership Status</th>
             <th>Membership End</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -26,8 +28,13 @@
             <td>{{ client.age or "" }}</td>
             <td>{{ client.height or "" }}</td>
             <td>{{ client.weight or "" }}</td>
+            <td>{{ client.program or "" }}</td>
             <td>{{ client.membership_status or "" }}</td>
             <td>{{ client.membership_end or "" }}</td>
+            <td class="action-links">
+                <a class="inline-link" href="{{ url_for('generate_program', name=client.name) }}">Generate Program</a>
+                <a class="inline-link" href="{{ url_for('membership', name=client.name) }}">Membership</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Membership Details</h2>
+
+<p><strong>Client Name:</strong> {{ client.name }}</p>
+<p><strong>Membership Status:</strong> {{ client.membership_status or "Not Available" }}</p>
+<p><strong>Membership End Date:</strong> {{ client.membership_end or "Not Available" }}</p>
+<p><strong>Assigned Program:</strong> {{ client.program or "Not Assigned" }}</p>
+
+<p class="top-actions">
+    <a class="inline-link" href="{{ url_for('clients') }}">Back to Clients</a>
+</p>
+{% endblock %}

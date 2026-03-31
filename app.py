@@ -1,10 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
+import random
 from functools import wraps
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "aceest-devops-assignment-key"
 DB_NAME = "aceest_fitness.db"
+
+PROGRAM_TEMPLATES = {
+    "Fat Loss": ["Full Body HIIT", "Circuit Training", "Cardio + Weights"],
+    "Muscle Gain": ["Push/Pull/Legs", "Upper/Lower Split", "Full Body Strength"],
+    "Beginner": ["Full Body 3x/week", "Light Strength + Mobility"]
+}
 
 
 def get_connection():
@@ -110,13 +117,15 @@ def login():
 def dashboard():
     conn = get_connection()
     client_count = conn.execute("SELECT COUNT(*) AS total FROM clients").fetchone()["total"]
+    workout_count = conn.execute("SELECT COUNT(*) AS total FROM workouts").fetchone()["total"]
     conn.close()
 
     return render_template(
         "dashboard.html",
         username=session.get("username"),
         role=session.get("role"),
-        client_count=client_count
+        client_count=client_count,
+        workout_count=workout_count
     )
 
 
@@ -170,6 +179,91 @@ def add_client():
         return redirect(url_for("clients"))
 
     return render_template("add_client.html")
+
+
+@app.route("/clients/<name>/generate-program")
+@login_required
+def generate_program(name):
+    category = random.choice(list(PROGRAM_TEMPLATES.keys()))
+    program_name = random.choice(PROGRAM_TEMPLATES[category])
+
+    conn = get_connection()
+    conn.execute("UPDATE clients SET program = ? WHERE name = ?", (program_name, name))
+    conn.commit()
+    conn.close()
+
+    flash(f"Program generated for {name}.", "success")
+    return redirect(url_for("clients"))
+
+
+@app.route("/clients/<name>/membership")
+@login_required
+def membership(name):
+    conn = get_connection()
+    client = conn.execute(
+        "SELECT name, membership_status, membership_end, program FROM clients WHERE name = ?",
+        (name,)
+    ).fetchone()
+    conn.close()
+
+    if not client:
+        flash("Client not found.", "error")
+        return redirect(url_for("clients"))
+
+    return render_template("membership.html", client=client)
+
+
+@app.route("/workouts")
+@login_required
+def workouts():
+    conn = get_connection()
+    workout_list = conn.execute(
+        "SELECT * FROM workouts ORDER BY workout_date DESC"
+    ).fetchall()
+    client_list = conn.execute(
+        "SELECT name FROM clients ORDER BY name"
+    ).fetchall()
+    conn.close()
+
+    return render_template("workouts.html", workouts=workout_list, clients=client_list)
+
+
+@app.route("/workouts/add", methods=["GET", "POST"])
+@login_required
+def add_workout():
+    conn = get_connection()
+    client_list = conn.execute("SELECT name FROM clients ORDER BY name").fetchall()
+
+    if request.method == "POST":
+        client_name = request.form.get("client_name", "").strip()
+        workout_date = request.form.get("workout_date", "").strip()
+        workout_type = request.form.get("workout_type", "").strip()
+        duration = request.form.get("duration", "").strip()
+        notes = request.form.get("notes", "").strip()
+
+        if not client_name or not workout_date or not workout_type:
+            conn.close()
+            flash("Client, workout date, and workout type are required.", "error")
+            return redirect(url_for("add_workout"))
+
+        conn.execute("""
+            INSERT INTO workouts (client_name, workout_date, workout_type, duration, notes)
+            VALUES (?, ?, ?, ?, ?)
+        """, (
+            client_name,
+            workout_date,
+            workout_type,
+            duration if duration else None,
+            notes if notes else None
+        ))
+        conn.commit()
+        conn.close()
+
+        flash("Workout added successfully.", "success")
+        return redirect(url_for("workouts"))
+
+    conn.close()
+    return render_template("add_workout.html", clients=client_list)
 
 
 @app.route("/logout")

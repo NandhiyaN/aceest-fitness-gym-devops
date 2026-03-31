@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Workouts</h2>
+
+<div class="top-actions">
+    <a href="{{ url_for('add_workout') }}">+ Add Workout</a>
+</div>
+
+{% if workouts %}
+<table>
+    <thead>
+        <tr>
+            <th>Client</th>
+            <th>Workout Date</th>
+            <th>Workout Type</th>
+            <th>Duration (min)</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for workout in workouts %}
+        <tr>
+            <td>{{ workout.client_name }}</td>
+            <td>{{ workout.workout_date }}</td>
+            <td>{{ workout.workout_type }}</td>
+            <td>{{ workout.duration or "" }}</td>
+            <td>{{ workout.notes or "" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="muted">No workouts recorded yet.</p>
+{% endif %}
+{% endblock %}
