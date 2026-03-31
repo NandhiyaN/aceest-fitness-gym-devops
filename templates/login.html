@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>ACEest Fitness & Gym Management</h2>
+<p class="muted">Please sign in to continue.</p>
+
+<form method="POST">
+    <label for="username">Email</label>
+    <input type="text" id="username" name="username" placeholder="Enter your email" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+    <button type="submit">Sign In</button>
+</form>
+
+<p class="muted">
+    Seeded admin user for assignment setup: <strong>admin@aceest.com</strong> / <strong>Admin@123</strong>
+</p>
+{% endblock %}
