@@ -5,7 +5,7 @@ from functools import wraps
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "aceest-devops-assignment-key"
-DB_NAME = "aceest_fitness.db"
+app.config["DATABASE"] = "aceest_fitness.db"
 
 PROGRAM_TEMPLATES = {
     "Fat Loss": ["Full Body HIIT", "Circuit Training", "Cardio + Weights"],
@@ -15,7 +15,7 @@ PROGRAM_TEMPLATES = {
 
 
 def get_connection():
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(app.config["DATABASE"])
     conn.row_factory = sqlite3.Row
     return conn
 
