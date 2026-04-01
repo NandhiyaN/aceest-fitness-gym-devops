@@ -1,0 +1,35 @@
+name: ACEest CI Pipeline
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create virtual environment
+        run: python -m venv .venv
+
+      - name: Install dependencies
+        run: |
+          . .venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          . .venv/bin/activate
+          export PYTHONPATH=$GITHUB_WORKSPACE
+          python -m pytest
+
+      - name: Build Docker image
+        run: docker build -t aceest-fitness-gym-app .
