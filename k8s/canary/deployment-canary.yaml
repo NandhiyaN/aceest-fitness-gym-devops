@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-fitness-canary
+  namespace: aceest-devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aceest-canary-app
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: aceest-canary-app
+        track: canary
+    spec:
+      containers:
+        - name: aceest-fitness-app
+          image: nandhiyan/aceest-fitness-gym:v2.3.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: APP_VERSION
+              value: "v2.3.0"
+            - name: DEPLOYMENT_STRATEGY
+              value: "canary"
+            - name: DEPLOYMENT_COLOR
+              value: "canary"
+            - name: RELEASE_LABEL
+              value: "Canary Release"
