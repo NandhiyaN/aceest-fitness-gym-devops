@@ -11,6 +11,7 @@ app.config["DATABASE"] = "aceest_fitness.db"
 APP_VERSION = os.getenv("APP_VERSION", "v1.0.0")
 DEPLOYMENT_STRATEGY = os.getenv("DEPLOYMENT_STRATEGY", "baseline")
 DEPLOYMENT_COLOR = os.getenv("DEPLOYMENT_COLOR", "none")
+RELEASE_LABEL = os.getenv("RELEASE_LABEL", "Base Kubernetes Release")
 
 PROGRAM_TEMPLATES = {
     "Fat Loss": ["Full Body HIIT", "Circuit Training", "Cardio + Weights"],
@@ -133,7 +134,8 @@ def dashboard():
         workout_count=workout_count,
         deployment_strategy=DEPLOYMENT_STRATEGY,
         deployment_color=DEPLOYMENT_COLOR,
-        app_version=APP_VERSION
+        app_version=APP_VERSION,
+        release_label=RELEASE_LABEL
     )
 
 
