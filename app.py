@@ -131,9 +131,9 @@ def dashboard():
         role=session.get("role"),
         client_count=client_count,
         workout_count=workout_count,
-        strategy=DEPLOYMENT_STRATEGY,
-        color=DEPLOYMENT_COLOR,
-        version=APP_VERSION
+        deployment_strategy=DEPLOYMENT_STRATEGY,
+        deployment_color=DEPLOYMENT_COLOR,
+        app_version=APP_VERSION
     )
 
 

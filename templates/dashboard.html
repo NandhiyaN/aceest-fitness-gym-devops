@@ -19,9 +19,9 @@
 
 <div class="deployment-info">
   <h3 style="color: #34495e">Deployment Information</h3>
-  <p>Strategy:<strong> Baseline </strong></p>
-  <p>Environment Color:<strong> None </strong></p>
-  <p>Application Version:<strong> v1.0.0 </strong></p>
+  <p>Strategy:<strong> {{ deployment_strategy }} </strong></p>
+  <p>Environment Color:<strong> {{ deployment_color }} </strong></p>
+  <p>Application Version:<strong>{{ app_version }} </strong></p>
 </div>
 
 {% endblock %}
