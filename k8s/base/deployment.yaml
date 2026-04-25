@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: aceest-fitness-app
-          image: nandhiyan/aceest-fitness-gym:v1.2.0
+          image: nandhiyan/aceest-fitness-gym:v2.0.0
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
