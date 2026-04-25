@@ -1,11 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
 import random
+import os
 from functools import wraps
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "aceest-devops-assignment-key"
 app.config["DATABASE"] = "aceest_fitness.db"
+
+APP_VERSION = os.getenv("APP_VERSION", "v1.0.0")
+DEPLOYMENT_STRATEGY = os.getenv("DEPLOYMENT_STRATEGY", "baseline")
+DEPLOYMENT_COLOR = os.getenv("DEPLOYMENT_COLOR", "none")
 
 PROGRAM_TEMPLATES = {
     "Fat Loss": ["Full Body HIIT", "Circuit Training", "Cardio + Weights"],
@@ -125,7 +130,10 @@ def dashboard():
         username=session.get("username"),
         role=session.get("role"),
         client_count=client_count,
-        workout_count=workout_count
+        workout_count=workout_count,
+        strategy=DEPLOYMENT_STRATEGY,
+        color=DEPLOYMENT_COLOR,
+        version=APP_VERSION
     )
 
 
@@ -276,8 +284,21 @@ def logout():
 
 @app.route("/health")
 def health():
-    return {"status": "UP", "application": "ACEest Fitness & Gym Management"}
+    return {
+        "status": "UP",
+        "application": "ACEest Fitness & Gym Management",
+        "version": APP_VERSION
+    }
 
+
+@app.route("/version")
+def version():
+    return {
+        "application": "ACEest Fitness & Gym Management",
+        "version": APP_VERSION,
+        "deployment_strategy": DEPLOYMENT_STRATEGY,
+        "deployment_color": DEPLOYMENT_COLOR
+    }
 
 if __name__ == "__main__":
     initialize_database()

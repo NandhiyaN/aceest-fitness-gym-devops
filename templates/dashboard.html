@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Dashboard</h2>
+<h2 style="color: #2c3e50">Dashboard</h2>
 <p>Welcome, <strong>{{ username }}</strong></p>
 <p>Role: <strong>{{ role }}</strong></p>
 
@@ -9,7 +9,19 @@
     This is the internal dashboard for ACEest Fitness & Gym Management.
 </p>
 
-<h3>Summary</h3>
+<hr style="margin-top: 1em; margin-bottom: 1em;">
+
+<h3 style="color: #34495e">Summary</h3>
 <p>Total registered clients: <strong>{{ client_count }}</strong></p>
 <p>Total recorded workouts: <strong>{{ workout_count }}</strong></p>
+
+<hr style="margin-top: 1em; margin-bottom: 1em;">
+
+<div class="deployment-info">
+  <h3 style="color: #34495e">Deployment Information</h3>
+  <p>Strategy:<strong> Baseline </strong></p>
+  <p>Environment Color:<strong> None </strong></p>
+  <p>Application Version:<strong> v1.0.0 </strong></p>
+</div>
+
 {% endblock %}
