@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "nandhiyan/aceest-fitness-gym"
-        IMAGE_TAG = "v2.5.0"
+        IMAGE_TAG = "v2.6.0"
         DOCKER_CREDENTIALS_ID = "nandhiya-docker-hub-cred"
     }
 
