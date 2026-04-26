@@ -1,7 +1,7 @@
-# ACEest Fitness & Gym Management
+# ACEest Fitness & Gym – DevOps CI/CD Pipeline
 
 A Flask-based web application developed for **ACEest Fitness & Gym** as part of a DevOps assignment.  
-This project modernizes the latest provided Python-based ACEest version into a web-based system and demonstrates a practical DevOps workflow using **GitHub, Pytest, Docker, Jenkins, and GitHub Actions**.
+This project demonstrates the implementation of a complete DevOps CI/CD pipeline for a Flask-based fitness application. The pipeline automates code integration, testing, quality analysis, containerization, and deployment using industry-standard tools.
 
 ---
 
@@ -213,11 +213,119 @@ aceest-fitness-gym-devops/
 │   ├── membership.html
 │   ├── workouts.html
 │   └── add_workout.html
+├── sonar-project.properties
+├── k8s/
+│   ├── rolling-update/
+│   ├── blue-green/
+│   ├── canary/
+│   ├── shadow/
+│   ├── ab-testing/
+|   ├── base/
 ├── tests/
 │   └── test_app.py
 └── .github/
     └── workflows/
         └── main.yml
 
+```
+---
+## 14. Tech Stack
 
-This project demonstrates a complete DevOps lifecycle, from development to automated validation and deployment, with final execution in a VM-based environment.
+| Category           | Tools Used            |
+| ------------------ | --------------------- |
+| Version Control    | Git, GitHub           |
+| CI/CD              | Jenkins               |
+| Testing            | Pytest                |
+| Code Quality       | SonarQube             |
+| Containerization   | Docker                |
+| Container Registry | Docker Hub            |
+| Orchestration      | Kubernetes (Minikube) |
+
+---
+## 15. CI/CD Pipeline Flow
+1. Code Commit
+      - Developers push code to GitHub (feature → develop branch)
+2. Jenkins Pipeline Trigger
+      - Jenkins automatically triggers build
+3. Build & Test
+      - Python environment setup
+      - Dependencies installed
+      - Pytest executed
+4. Code Quality Analysis
+      - SonarQube analysis performed
+      - Quality gate validated
+5. Docker Build
+      - Docker image created
+6. Docker Push
+      - Image pushed to Docker Hub with version tags
+7. Deployment
+      - Deployed to Kubernetes (Minikube)
+
+---
+## 16. Docker
+   - Docker image built using Dockerfile
+   - Images pushed to Docker Hub
+
+Example: docker pull nandhiyan/aceest-fitness-gym:<version>
+
+---
+## 17. Kubernetes (Minikube)
+Application deployed locally using Minikube with YAML configurations.
+
+Commands used:
+kubectl apply -f k8s/
+kubectl get pods
+kubectl get services
+minikube service <service-name>
+
+---
+## 18. Deployment Strategies Implemented
+1. Rolling Update
+Gradual replacement of old version with new version
+2. Blue-Green Deployment
+Two environments (Blue & Green)
+Traffic switched between versions
+3. Canary Deployment
+New version released to small subset of users
+4. Shadow Deployment
+New version tested silently without impacting users
+5. A/B Testing
+Different versions served to different user groups
+
+---
+## 19. Rollback Mechanism
+   - Kubernetes supports rollback using:
+   - kubectl rollout undo deployment/<deployment-name>
+
+Ensures system stability in case of failure.
+
+---
+## 20. Testing
+   - Unit tests implemented using Pytest
+   - Automated execution in Jenkins pipeline
+
+Command: python -m pytest -v
+
+---
+## 21. Code Quality
+   - Integrated SonarQube for static analysis
+   - Ensures:
+      - Code quality
+      - Maintainability
+      - Bug detection
+
+---
+## 22. Key Outcomes
+
+ - Implemented end-to-end CI/CD pipeline
+ - Automated testing and quality checks
+ - Containerized application using Docker
+ - Deployed using Kubernetes
+ - Implemented advanced deployment strategies
+ - Ensured zero-downtime deployment and rollback
+
+ ---
+ ## 23. Conclusion
+ This project demonstrates a complete CI/CD pipeline for the ACEest Fitness & Gym application, integrating Jenkins, Docker, SonarQube, Pytest, and Kubernetes. The pipeline automates code integration, testing, quality checks, containerization, and deployment.
+
+ Advanced deployment strategies like Rolling, Blue-Green, and Canary ensure zero-downtime releases and reliable rollback. Overall, the implementation highlights how DevOps practices improve automation, code quality, and deployment efficiency in real-world applications.

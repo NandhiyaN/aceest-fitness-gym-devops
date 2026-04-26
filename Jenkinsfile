@@ -35,11 +35,30 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube-server') {
+                sh '''
+                . .venv/bin/activate
+                sonar-scanner
+                '''
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh '''
                 docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                 docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
+                '''
+            }
+        }
+
+        stage('Run Tests Inside Docker Container') {
+            steps {
+                sh '''
+                docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} python -m pytest -v
                 '''
             }
         }
