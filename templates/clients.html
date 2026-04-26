@@ -3,22 +3,30 @@
 {% block content %}
 <h2>Clients</h2>
 
+<!-- Description added for clarity & accessibility -->
+<p class="page-description">
+    View and manage all registered clients, including their personal details,
+    fitness program, and membership status. You can also generate workout programs
+    and update membership information.
+</p>
+
 <div class="top-actions">
-    <a href="{{ url_for('add_client') }}">+ Add New Client</a>
+    <a href="{{ url_for('add_client') }}" aria-label="Add a new client">+ Add New Client</a>
 </div>
 
 {% if clients %}
 <table>
+    <caption>List of registered clients and their details</caption>
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Height</th>
-            <th>Weight</th>
-            <th>Program</th>
-            <th>Membership Status</th>
-            <th>Membership End</th>
-            <th>Actions</th>
+            <th scope="col">Name</th>
+            <th scope="col">Age</th>
+            <th scope="col">Height</th>
+            <th scope="col">Weight</th>
+            <th scope="col">Program</th>
+            <th scope="col">Membership Status</th>
+            <th scope="col">Membership End</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -32,8 +40,16 @@
             <td>{{ client.membership_status or "" }}</td>
             <td>{{ client.membership_end or "" }}</td>
             <td class="action-links">
-                <a class="inline-link" href="{{ url_for('generate_program', name=client.name) }}">Generate Program</a>
-                <a class="inline-link" href="{{ url_for('membership', name=client.name) }}">Membership</a>
+                <a class="inline-link"
+                   href="{{ url_for('generate_program', name=client.name) }}"
+                   aria-label="Generate program for {{ client.name }}">
+                   Generate Program
+                </a>
+                <a class="inline-link"
+                   href="{{ url_for('membership', name=client.name) }}"
+                   aria-label="Manage membership for {{ client.name }}">
+                   Membership
+                </a>
             </td>
         </tr>
         {% endfor %}

@@ -3,19 +3,26 @@
 {% block content %}
 <h2>Workouts</h2>
 
+<!-- Description added for clarity & accessibility -->
+<p class="page-description">
+    Track and review all recorded workouts for clients, including workout type,
+    duration, and notes. Use this section to monitor progress and maintain workout history.
+</p>
+
 <div class="top-actions">
-    <a href="{{ url_for('add_workout') }}">+ Add Workout</a>
+    <a href="{{ url_for('add_workout') }}" aria-label="Add a new workout">+ Add Workout</a>
 </div>
 
 {% if workouts %}
 <table>
+    <caption>List of recorded workouts for all clients</caption>
     <thead>
         <tr>
-            <th>Client</th>
-            <th>Workout Date</th>
-            <th>Workout Type</th>
-            <th>Duration (min)</th>
-            <th>Notes</th>
+            <th scope="col">Client</th>
+            <th scope="col">Workout Date</th>
+            <th scope="col">Workout Type</th>
+            <th scope="col">Duration (min)</th>
+            <th scope="col">Notes</th>
         </tr>
     </thead>
     <tbody>
