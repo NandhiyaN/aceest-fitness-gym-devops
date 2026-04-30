@@ -1,209 +1,115 @@
 # ACEest Fitness & Gym – DevOps CI/CD Pipeline
 
-A Flask-based web application developed for **ACEest Fitness & Gym** as part of a DevOps assignment.  
-This project demonstrates the implementation of a complete DevOps CI/CD pipeline for a Flask-based fitness application. The pipeline automates code integration, testing, quality analysis, containerization, and deployment using industry-standard tools.
+A Flask-based web application developed for **ACEest Fitness & Gym** as part of Assignment 2.  
+This repository demonstrates a complete DevOps implementation covering application development, version control, automated testing, Jenkins CI/CD, SonarQube quality analysis, Docker containerization, Docker Hub image versioning, Kubernetes deployment using Minikube, advanced deployment strategies, and rollback validation.
 
 ---
 
-## 1. Project Overview
+## 1. Project Objective
 
-The goal of this assignment was to implement a complete DevOps lifecycle around a gym management application. The required flow included:
+The objective of this project is to build an end-to-end automated DevOps pipeline for the ACEest Fitness & Gym application. The pipeline ensures that every application version can be developed, tested, quality-checked, containerized, pushed to a registry, and deployed using Kubernetes in a repeatable manner.
 
-- building a Flask application
-- managing source code through Git and GitHub
-- adding automated testing using Pytest
-- containerizing the application with Docker
-- configuring Jenkins as a build validation environment
-- configuring GitHub Actions to run CI on every push and pull request
+This project demonstrates the following learning outcomes:
 
-These expectations are aligned with the assignment brief, which asks for a Flask application, version control maturity, test coverage, Docker support, Jenkins-based build validation, and a GitHub Actions workflow for automated build and test stages.
+- Build an end-to-end automated DevOps pipeline.
+- Integrate testing, quality assurance, and deployment automation.
+- Apply real-world deployment and rollback strategies.
+- Understand how DevOps improves software quality, delivery speed, consistency, and operational resilience.
 
 ---
 
-## 2. Problem Statement
+## 2. Technology Stack
 
-ACEest Fitness & Gym is treated as a growing startup that needs a more reliable and automated delivery workflow. The objective of this implementation was to move from a Python-based standalone application approach to a web-based solution that supports:
-
-- consistent setup across environments
-- build validation in Jenkins
-- automated checks on every code change
-- easier packaging and deployment using Docker
-
----
-
-## 3. Solution Approach
-
-The latest provided Python version was used as the reference for core functionality. The application was then redesigned as a Flask-based web application.
-
-The final solution includes:
-
-- **Flask web application** for user interaction
-- **SQLite database** for lightweight data persistence
-- **HTML templates with Jinja2** for UI rendering
-- **Pytest** for validating core backend flows
-- **Docker** for containerizing the application
-- **Jenkins** for manual clean-build validation
-- **GitHub Actions** for automated CI checks
+| Area                  | Tool / Technology                                       |
+|-----------------------|---------------------------------------------------------|
+| Application           | Python Flask                                            |
+| UI                    | HTML, Jinja2 Templates, CSS                             |
+| Database              | SQLite                                                  |
+| Testing               | Pytest                                                  |
+| Version Control       | Git and GitHub                                          |
+| CI/CD                 | Jenkins                                                 |
+| Static Code Analysis  | SonarQube                                               |
+| Containerization      | Docker                                                  |
+| Container Registry    | Docker Hub                                              |
+| Orchestration         | Kubernetes                                              | 
+| Local Cluster         | Minikube                                                |
+| Public URL            | Render                                                  |
+| Deployment Strategies | Rolling Update, Blue-Green, Canary, Shadow, A/B Testing |
 
 ---
 
-## 4. Key Features Implemented
+## 3. Application Features
 
-The application currently supports the following features:
+The ACEest Fitness & Gym application includes:
 
 - Admin login
 - Dashboard summary
 - Add and view clients
-- Membership status tracking
-- Program generation for clients
+- Membership tracking
+- Fitness program generation
 - Add and view workouts
-- Health endpoint for basic validation
-- Automated tests for major flows
+- Health check endpoint
+- Deployment strategy and version indicators on the UI
+
+The application reads the following environment variables so that each deployed Kubernetes strategy can display release-specific information:
+
+```bash
+APP_VERSION
+DEPLOYMENT_STRATEGY
+DEPLOYMENT_COLOR
+RELEASE_LABEL
+```
 
 ---
 
-## 5. Backend Design
+## 4. DevOps Architecture
 
-The backend was implemented as a **single Flask application**.
-
-### Backend responsibilities
-- handle user requests through Flask routes
-- manage authentication using session-based login
-- interact with the SQLite database
-- perform business logic for client and workout operations
-- render UI pages with server-side templates
-- provide a simple health check endpoint
-
-### Database handling
-SQLite was used as the persistence layer because it is lightweight, file-based, and easy to set up for assignment purposes.  
-The following logical entities were handled:
-
-- `users`
-- `clients`
-- `workouts`
-
-### Business logic handled in backend
-The backend includes logic for:
-- validating login credentials
-- counting dashboard summary values
-- inserting client records
-- generating a program for a client
-- viewing membership details
-- inserting workout records
-- fetching client and workout data for UI pages
-
-### Why one backend only
-This project was implemented as a **single Flask application**, so both UI rendering and backend logic are packaged together.  
-There is no separate frontend app and backend API as independent services in the current design.
+```text
+Developer
+   |
+   v
+GitHub Repository
+   |
+   v
+Jenkins Pipeline
+   |-- Checkout Code
+   |-- Install Dependencies
+   |-- Run Pytest
+   |-- Run SonarQube Analysis
+   |-- Build Docker Image
+   |-- Run Tests inside Docker Container
+   |-- Push Image to Docker Hub
+   |
+   v
+Docker Hub Registry
+   |
+   v
+Kubernetes / Minikube Deployment
+   |-- Rolling Update
+   |-- Blue-Green Deployment
+   |-- Canary Release
+   |-- Shadow Deployment
+   |-- A/B Testing
+   |-- Rollback Validation
+```
 
 ---
 
-## 6. Frontend / UI Approach
-
-The UI was implemented using:
-
-- Flask templates
-- Jinja2 rendering
-- HTML
-- simple CSS styling
-
-The templates are kept under the `templates/` folder, and the application renders pages such as:
-
-- Login
-- Dashboard
-- Clients
-- Add Client
-- Membership Details
-- Workouts
-- Add Workout
-
-This keeps the project simple, maintainable, and suitable for the current assignment scope.
-
----
-## 7. Local Setup Instructions
-
-1. Clone the repository:
-   git clone https://github.com/NandhiyaN/aceest-fitness-gym-devops.git
-
-2. Navigate to the project folder:
-   cd aceest-fitness-gym-devops
-
-3. Install dependencies:
-   pip install -r requirements.txt
-
-4. Run the application:
-   python app.py
-
-5. Open the application in browser:
-   http://localhost:5000
-
----
-## 8. Running Tests
-
-Run automated tests using Pytest:
-
-python -m pytest
-
-This validates core application functionality such as login, client management, program generation, and workout operations.
-
----
-## 9. Docker Setup
-
-Build Docker image:
-docker build -t aceest-app .
-
-Run Docker container:
-docker run -p 5000:5000 aceest-app
-
----
-## 10. Jenkins Build Process
-
-Jenkins is configured as a clean build environment to validate the application.
-
-It performs the following steps:
-- Pulls the latest code from the GitHub repository
-- Installs project dependencies
-- Executes automated tests using Pytest
-- Validates the application build process
-
-Jenkins ensures that the application is built and tested in an isolated environment, independent of local configurations.
-
----
-## 11. GitHub Actions CI Pipeline
-
-GitHub Actions is configured to automatically trigger on every push and pull request.
-
-The pipeline performs the following stages:
-- Source code checkout
-- Dependency installation
-- Automated testing using Pytest
-- Docker image build validation
-
-This ensures continuous integration and early detection of issues.
-
----
-## 12. VM-Based Execution
-
-The complete DevOps pipeline was executed and validated in a Virtual Machine (VM) environment.
-
-This ensures:
-- Environment consistency across deployments
-- Reproducible builds
-- Simulation of a real-world deployment setup
-
-Final validation of the application was performed in the VM using Jenkins and Docker.
-
----
-## 13. Project Structure
+## 5. Repository Structure
 
 ```text
 aceest-fitness-gym-devops/
 │
 ├── app.py
+├── aceest_fitness.db
 ├── requirements.txt
 ├── Dockerfile
-├── .dockerignore
+├── Jenkinsfile
+├── sonar-project.properties
 ├── README.md
+├── .dockerignore
+├── .gitignore
+│
 ├── templates/
 │   ├── base.html
 │   ├── login.html
@@ -213,119 +119,514 @@ aceest-fitness-gym-devops/
 │   ├── membership.html
 │   ├── workouts.html
 │   └── add_workout.html
-├── sonar-project.properties
-├── k8s/
-│   ├── rolling-update/
-│   ├── blue-green/
-│   ├── canary/
-│   ├── shadow/
-│   ├── ab-testing/
-|   ├── base/
+│
 ├── tests/
 │   └── test_app.py
-└── .github/
-    └── workflows/
-        └── main.yml
-
+│
+└── k8s/
+    ├── base/
+    │   ├── namespace.yaml
+    │   ├── deployment.yaml
+    │   └── service.yaml
+    │
+    ├── rolling-update/
+    │   └── deployment.yaml
+    │
+    ├── blue-green/
+    │   ├── deployment-blue.yaml
+    │   ├── deployment-green.yaml
+    │   ├── service-blue.yaml
+    │   └── service-green.yaml
+    │
+    ├── canary/
+    │   ├── deployment-stable.yaml
+    │   ├── deployment-canary.yaml
+    │   └── service.yaml
+    │
+    ├── shadow/
+    │   ├── deployment-main.yaml
+    │   ├── deployment-shadow.yaml
+    │   ├── service-main.yaml
+    │   └── service-shadow.yaml
+    │
+    └── ab-testing/
+        ├── deployment-a.yaml
+        ├── deployment-b.yaml
+        ├── service-a.yaml
+        └── service-b.yaml
 ```
----
-## 14. Tech Stack
-
-| Category           | Tools Used            |
-| ------------------ | --------------------- |
-| Version Control    | Git, GitHub           |
-| CI/CD              | Jenkins               |
-| Testing            | Pytest                |
-| Code Quality       | SonarQube             |
-| Containerization   | Docker                |
-| Container Registry | Docker Hub            |
-| Orchestration      | Kubernetes (Minikube) |
 
 ---
-## 15. CI/CD Pipeline Flow
-1. Code Commit
-      - Developers push code to GitHub (feature → develop branch)
-2. Jenkins Pipeline Trigger
-      - Jenkins automatically triggers build
-3. Build & Test
-      - Python environment setup
-      - Dependencies installed
-      - Pytest executed
-4. Code Quality Analysis
-      - SonarQube analysis performed
-      - Quality gate validated
-5. Docker Build
-      - Docker image created
-6. Docker Push
-      - Image pushed to Docker Hub with version tags
-7. Deployment
-      - Deployed to Kubernetes (Minikube)
+
+## 6. Version Control Strategy
+
+The project follows a structured Git workflow:
+
+| Branch      | Purpose                                      |
+|-------------|----------------------------------------------|
+| `main`      | Stable production-ready code                 |
+| `develop`   | Integration branch for tested changes        |
+| `feature/*` | Individual feature or infrastructure changes |
+
+Example feature branches:
+
+- `feature/jenkins-pipeline`
+- `feature/k8s-base`
+- `feature/rolling-update`
+- `feature/blue-green`
+- `feature/canary`
+- `feature/shadow`
+- `feature/ab-testing`
+
+Version tags are used to track incremental releases. Docker images are also tagged using version numbers such as:
+
+```text
+v1.0.0
+v2.0.0
+v3.0.0
+latest
+```
 
 ---
-## 16. Docker
-   - Docker image built using Dockerfile
-   - Images pushed to Docker Hub
 
-Example: docker pull nandhiyan/aceest-fitness-gym:<version>
+## 7. Local Application Setup
 
----
-## 17. Kubernetes (Minikube)
-Application deployed locally using Minikube with YAML configurations.
+### 7.1 Clone Repository
 
-Commands used:
-kubectl apply -f k8s/
-kubectl get pods
-kubectl get services
-minikube service <service-name>
+```bash
+git clone https://github.com/NandhiyaN/aceest-fitness-gym-devops.git
+cd aceest-fitness-gym-devops
+```
 
----
-## 18. Deployment Strategies Implemented
-1. Rolling Update
-Gradual replacement of old version with new version
-2. Blue-Green Deployment
-Two environments (Blue & Green)
-Traffic switched between versions
-3. Canary Deployment
-New version released to small subset of users
-4. Shadow Deployment
-New version tested silently without impacting users
-5. A/B Testing
-Different versions served to different user groups
+### 7.2 Install Dependencies
 
----
-## 19. Rollback Mechanism
-   - Kubernetes supports rollback using:
-   - kubectl rollout undo deployment/<deployment-name>
+```bash
+pip install -r requirements.txt
+```
 
-Ensures system stability in case of failure.
+### 7.3 Run Application
+
+```bash
+python app.py
+```
+
+### 7.4 Open:
+
+```text
+http://localhost:5000
+```
+
+### 7.5 Default login:
+
+```text
+Username: admin@aceest.com
+Password: Admin@123
+```
 
 ---
-## 20. Testing
-   - Unit tests implemented using Pytest
-   - Automated execution in Jenkins pipeline
 
-Command: python -m pytest -v
+## 8. Running Automated Tests
 
----
-## 21. Code Quality
-   - Integrated SonarQube for static analysis
-   - Ensures:
-      - Code quality
-      - Maintainability
-      - Bug detection
+Run Pytest locally:
+
+```bash
+python -m pytest -v
+```
+
+The tests validate key application flows such as login, dashboard access, client management, workout management, and health checks.
 
 ---
-## 22. Key Outcomes
 
- - Implemented end-to-end CI/CD pipeline
- - Automated testing and quality checks
- - Containerized application using Docker
- - Deployed using Kubernetes
- - Implemented advanced deployment strategies
- - Ensured zero-downtime deployment and rollback
+## 9. SonarQube Code Quality Analysis
 
- ---
- ## 23. Conclusion
- This project demonstrates a complete CI/CD pipeline for the ACEest Fitness & Gym application, integrating Jenkins, Docker, SonarQube, Pytest, and Kubernetes. The pipeline automates code integration, testing, quality checks, containerization, and deployment.
+SonarQube is used for static code analysis and quality validation.
 
- Advanced deployment strategies like Rolling, Blue-Green, and Canary ensure zero-downtime releases and reliable rollback. Overall, the implementation highlights how DevOps practices improve automation, code quality, and deployment efficiency in real-world applications.
+Run scanner locally after SonarQube is available:
+
+```bash
+sonar-scanner
+```
+
+The repository includes:
+
+```text
+sonar-project.properties
+```
+
+SonarQube is also integrated in the Jenkins pipeline using:
+
+```groovy
+withSonarQubeEnv('sonarqube-server') {
+    sh """
+    . .venv/bin/activate
+    sonar-scanner
+    """
+}
+```
+
+**Screenshot added:**
+
+![SonarQube Quality Result](images/sonarQube.png)
+
+---
+
+## 10. Docker Containerization
+
+### 10.1 Build Docker Image
+
+```bash
+docker build -t nandhiyan/aceest-fitness-gym:v3.0.0 .
+```
+
+### 10.2 Run Docker Container
+
+```bash
+docker run -p 5000:5000 nandhiyan/aceest-fitness-gym:v3.0.0
+```
+
+Open:
+
+```text
+http://localhost:5000
+```
+
+### 10.3 Push Image to Docker Hub
+
+```bash
+docker tag nandhiyan/aceest-fitness-gym:v3.0.0 nandhiyan/aceest-fitness-gym:latest
+
+docker push nandhiyan/aceest-fitness-gym:v3.0.0
+docker push nandhiyan/aceest-fitness-gym:latest
+```
+
+Docker Hub repository:
+
+```text
+https://hub.docker.com/r/nandhiyan/aceest-fitness-gym
+```
+
+**Screenshot added:**
+
+![DockerHub Image tags](images/dockerHub.png)
+![DockerHub Images](images/dockerImage.png)
+
+---
+
+## 11. Jenkins CI/CD Pipeline
+
+The Jenkinsfile implements the following pipeline stages:
+
+1. Checkout
+2. Install Dependencies
+3. Run Tests
+4. SonarQube Analysis
+5. Build Docker Image
+6. Run Tests Inside Docker Container
+7. Push Docker Image
+
+### Jenkins Image Configuration
+
+```groovy
+IMAGE_NAME = "nandhiyan/aceest-fitness-gym"
+IMAGE_TAG = "v3.0.0"
+DOCKER_CREDENTIALS_ID = "nandhiya-docker-hub-cred"
+```
+
+### Jenkins Pipeline Outcome
+
+The pipeline ensures:
+
+- Code is pulled from GitHub.
+- Dependencies are installed in a clean environment.
+- Pytest test cases are executed.
+- SonarQube analysis is triggered.
+- Docker image is built.
+- Tests are executed inside the Docker image.
+- Docker image is pushed to Docker Hub.
+
+**Screenshot added:**
+
+![Jenkins successful stage view ](images/jenkinsStage.png)
+
+---
+
+## 12. Kubernetes Deployment Using Minikube
+
+### 12.1 Start Minikube
+
+```bash
+minikube start
+```
+
+### 12.2 Apply Base Kubernetes Manifests
+
+```bash
+kubectl apply -f k8s/base/
+```
+
+### 12.3 Verify Pods and Services
+
+```bash
+kubectl get pods -n aceest-devops
+kubectl get svc -n aceest-devops
+```
+
+### 12.4 Access Application
+
+```bash
+minikube service aceest-fitness-service -n aceest-devops --url
+```
+
+Example output:
+
+```text
+http://127.0.0.1:<dynamic-port>
+```
+
+Note: When using Minikube with Docker driver on Windows, the terminal session may need to remain open for the local service URL to continue working.
+
+**Screenshot added:**
+
+![Pods and svc](images/podsSvc.png)
+![Application opened through Minikube URL](images/application.png)
+
+---
+
+## 13. Deployment Strategies
+
+### 13.1 Rolling Update
+
+Rolling update gradually replaces old pods with new pods while maintaining availability.
+
+Apply rolling update:
+
+```bash
+kubectl apply -f k8s/rolling-update/deployment.yaml
+kubectl rollout status deployment/aceest-fitness-app -n aceest-devops
+kubectl get pods -n aceest-devops
+```
+
+Rollback rolling update:
+
+```bash
+kubectl rollout history deployment/aceest-fitness-app -n aceest-devops
+kubectl rollout undo deployment/aceest-fitness-app -n aceest-devops
+kubectl rollout status deployment/aceest-fitness-app -n aceest-devops
+```
+
+**Screenshot added:**
+
+![Rolling Update Pods](images/rollingUpdate.png)
+![Rolling Update Application Screen](images/rollingUpdateAppln.png)
+![After Rollback](images/afterRollback.png)
+![Back to previous code](images/previousCode.png)
+
+---
+
+### 13.2 Blue-Green Deployment
+
+Blue-Green deployment runs two releases in parallel:
+
+- Blue = current stable version
+- Green = new release version
+
+Deploy Blue:
+
+```bash
+kubectl apply -f k8s/blue-green/deployment-blue.yaml
+kubectl apply -f k8s/blue-green/service-blue.yaml
+```
+
+Deploy Green and switch service:
+
+```bash
+kubectl apply -f k8s/blue-green/deployment-green.yaml
+kubectl apply -f k8s/blue-green/service-green.yaml
+```
+
+Access service:
+
+```bash
+minikube service aceest-blue-green-service -n aceest-devops --url
+```
+
+Rollback to Blue:
+
+```bash
+kubectl apply -f k8s/blue-green/service-blue.yaml
+```
+
+**Screenshot added:**
+
+![Blue deployment pods](images/blueDep.png)
+![Green deployment pods](images/greenDep.png)
+
+---
+
+### 13.3 Canary Release
+
+Canary release deploys a small number of new-version pods with stable pods. This reduces risk by exposing only a limited portion of traffic to the new version.
+
+Deploy stable and canary:
+
+```bash
+kubectl apply -f k8s/canary/deployment-stable.yaml
+kubectl apply -f k8s/canary/deployment-canary.yaml
+kubectl apply -f k8s/canary/service.yaml
+```
+
+Verify:
+
+```bash
+kubectl get pods -n aceest-devops
+kubectl get svc -n aceest-devops
+minikube service aceest-canary-service -n aceest-devops --url
+```
+
+Rollback Canary:
+
+```bash
+kubectl delete deployment aceest-fitness-canary -n aceest-devops
+```
+
+**Screenshot added:**
+
+![Canary pods](images/canaryPods.png)
+![Canary rollback](images/canaryRollBack.png)
+
+---
+
+### 13.4 Shadow Deployment
+
+Shadow deployment runs a copy of the application separately from the main release. This helps validate a new version without making it the primary user-facing version.
+
+Deploy main and shadow:
+
+```bash
+kubectl apply -f k8s/shadow/deployment-main.yaml
+kubectl apply -f k8s/shadow/deployment-shadow.yaml
+kubectl apply -f k8s/shadow/service-main.yaml
+kubectl apply -f k8s/shadow/service-shadow.yaml
+```
+
+Access URLs:
+
+```bash
+minikube service aceest-shadow-main-service -n aceest-devops --url
+minikube service aceest-shadow-copy-service -n aceest-devops --url
+```
+
+**Screenshot added:**
+
+![Main](images/main.png)
+![Shadow](images/shadow.png)
+
+---
+
+### 13.5 A/B Testing
+
+A/B Testing deploys two variants of the application to compare behavior or user experience.
+
+Deploy Variant A and Variant B:
+
+```bash
+kubectl apply -f k8s/ab-testing/deployment-a.yaml
+kubectl apply -f k8s/ab-testing/deployment-b.yaml
+kubectl apply -f k8s/ab-testing/service-a.yaml
+kubectl apply -f k8s/ab-testing/service-b.yaml
+```
+
+Access both variants:
+
+```bash
+minikube service aceest-ab-a-service -n aceest-devops --url
+minikube service aceest-ab-b-service -n aceest-devops --url
+```
+
+**Screenshot added:**
+
+![Variant A testing](images/variantA.png)
+![Variant B testing](images/variantB.png)
+
+---
+
+## 14. Rollback Summary
+
+| Strategy | Rollback Method |
+|---|---|
+| Rolling Update | `kubectl rollout undo deployment/aceest-fitness-app -n aceest-devops` |
+| Blue-Green | Reapply `service-blue.yaml` to switch traffic back to Blue |
+| Canary | Delete canary deployment and continue using stable deployment |
+| Shadow | Keep main release active and remove/ignore shadow copy |
+| A/B Testing | Route users back to stable/approved variant |
+
+---
+
+## 15. Useful Kubernetes Commands
+
+```bash
+kubectl get pods -n aceest-devops
+kubectl get svc -n aceest-devops
+kubectl get deployments -n aceest-devops
+kubectl rollout history deployment/aceest-fitness-app -n aceest-devops
+kubectl rollout status deployment/aceest-fitness-app -n aceest-devops
+kubectl describe pod <pod-name> -n aceest-devops
+kubectl logs <pod-name> -n aceest-devops
+```
+
+---
+
+## 16. Reference Links
+
+GitHub Repository:
+
+```text
+https://github.com/NandhiyaN/aceest-fitness-gym-devops
+```
+
+![All Pods](images/podsRunning.png)
+
+
+Docker Hub Repository:
+
+```text
+https://hub.docker.com/r/nandhiyan/aceest-fitness-gym
+```
+
+Docker Image:
+
+```text
+nandhiyan/aceest-fitness-gym:v3.0.0
+```
+
+Kubernetes Namespace:
+
+```text
+aceest-devops
+```
+
+Final Running Endpoint URLs:
+
+```text
+Final Deployment URL: https://aceest-fitness-gym-v3-0-0-final.onrender.com
+Rolling Update URL: https://aceest-fitness-gym-v2-1-0-rollingupdate.onrender.com
+Blue-Green URL: https://aceest-fitness-gym-v2-2-0-bluegreen.onrender.com
+Canary URL: https://aceest-fitness-gym-v2-3-0-canary.onrender.com
+Shadow URL: https://aceest-fitness-gym-v2-4-0.onrender.com
+A/B URL: https://aceest-fitness-gym-v2-5-0-ab.onrender.com
+```
+
+---
+
+## 17. Final Outcome
+
+This project successfully implements a complete DevOps lifecycle for the ACEest Fitness & Gym application. It demonstrates automated build validation, test automation, static code analysis, Docker image creation, Docker Hub publishing, Kubernetes deployment, advanced deployment strategies, and rollback mechanisms.
+
+The solution improves:
+
+- Software quality
+- Deployment speed
+- Release consistency
+- Operational resilience
+- Traceability across versions
+- Recovery capability during failed deployments
